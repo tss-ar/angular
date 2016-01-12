@@ -106,7 +106,8 @@ gulp.task('build.jsDts', function () {
         name: packageName,
         prefix: '',
         main: path.join(config.dest.app.jsTds, 'index.d.ts'),
-        out: path.join(__dirname, config.dest.app.js, 'index.d.ts')
+        out: path.join(__dirname, config.dest.app.js, 'index.d.ts'),
+        verbose: true
     });
     
     // dtsGenerator({
