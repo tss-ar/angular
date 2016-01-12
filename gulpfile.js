@@ -85,14 +85,14 @@ gulp.task('build.html', function () {
 
 gulp.task('build.js', function () {
     var tsResult = gulp.src([config.src.app.js, config.src.app.jsTds])
-        .pipe(sourcemaps.init())
+       // .pipe(sourcemaps.init())
         .pipe(ts(tsProjectSrc, {
             typescript: require('typescript')
         }));
 
     let jsStream = tsResult.js
         .pipe(ngAnnotate({ single_quotes: true }))
-        .pipe(sourcemaps.write('.'))
+        //.pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.dest.app.js));
 
     return merge([
@@ -106,8 +106,7 @@ gulp.task('build.jsDts', function () {
         name: packageName,
         prefix: '',
         main: path.join(config.dest.app.jsTds, 'index.d.ts'),
-        out: path.join(__dirname, config.dest.app.js, 'index.d.ts'),
-        verbose: true
+        out: path.join(__dirname, config.dest.app.js, 'index.d.ts')
     });
     
     // dtsGenerator({

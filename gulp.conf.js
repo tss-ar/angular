@@ -12,7 +12,7 @@ module.exports = {
             css: 'dist/app',
             html: 'dist/app',
             js: 'dist/app',
-            jsTds: 'dist/dts'
+            jsTds: 'dist/app'
         }
     }
 };

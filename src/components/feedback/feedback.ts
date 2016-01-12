@@ -1,4 +1,4 @@
-﻿import {FeedbackType} from 'tss-angular/entities';
+﻿import {FeedbackType} from '../../entities';
 
 /*@ngInject*/ 
 export function feedback() {
