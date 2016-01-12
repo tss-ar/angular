@@ -15,6 +15,8 @@ var ts = require('gulp-typescript');
 var merge = require('merge2');
 var dts = require('dts-bundle');
 var ngAnnotate = require('gulp-ng-annotate');
+var dtsGenerator = require('dts-generator').default;
+var tsproject = require( 'tsproject' );
 var config = require('./gulp.conf');
 
 var packageName = 'tss-angular';
@@ -68,13 +70,13 @@ gulp.task('build.css', () => {
         .pipe(gulp.dest(config.dest.app.css));
 });
 
-gulp.task('build.html', function() {
+gulp.task('build.html', function () {
     return gulp.src(config.src.app.html)
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(ngTemplates({
             filename: 'templates.js',
             module: 'app.templates',
-            path: function(path, base) {
+            path: function (path, base) {
                 return path.replace(base, '/app/');
             }
         }))
@@ -102,20 +104,31 @@ gulp.task('build.js', function () {
 gulp.task('build.jsDts', function () {
     dts.bundle({
         name: packageName,
-        // prefix: '',
+        prefix: '',
         main: path.join(config.dest.app.jsTds, 'index.d.ts'),
         out: path.join(__dirname, config.dest.app.js, 'index.d.ts')
     });
+    
+    // dtsGenerator({
+    //     name: packageName,
+    //     project: 'src',
+    //     out: 'index2.d.ts',
+    //     exclude: ['./**/*.d.ts'],
+    // verbose: true
+    // });
+    
+    // return tsproject.src( './src')
+    //     .pipe( gulp.dest( './dist3' ) );
 });
 
 gulp.task('watch.css', () => {
-    watch(config.src.app.css, batch(function(events, done) {
+    watch(config.src.app.css, batch(function (events, done) {
         gulp.start('build.css', done);
     }));
 });
 
 gulp.task('watch.html', () => {
-    watch(config.src.app.html, batch(function(events, done) {
+    watch(config.src.app.html, batch(function (events, done) {
         gulp.start('build.html', done);
     }));
 });
