@@ -1,0 +1,30 @@
+{
+  "name": "tss-angular",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matias Ribichich",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "del": "2.2.0",
+    "dts-bundle": "^0.3.0",
+    "gulp": "3.9.0",
+    "gulp-autoprefixer": "3.1.0",
+    "gulp-batch": "1.0.5",
+    "gulp-htmlmin": "1.3.0",
+    "gulp-ng-annotate": "1.1.0",
+    "gulp-ng-templates": "0.0.6",
+    "gulp-sass": "^2.1.1",
+    "gulp-sourcemaps": "1.6.0",
+    "gulp-typescript": "2.10.0",
+    "gulp-watch": "4.3.5",
+    "merge2": "0.3.6",
+    "run-sequence": "1.1.5"
+  },
+  "dependencies": {},
+  "typescript": {
+    "definition": "dist/angular/index.d.ts"
+  }
+}
