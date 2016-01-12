@@ -1,6 +1,4 @@
-﻿'use strict';
-
-export enum FeedbackType {
+﻿export enum FeedbackType {
     None,
     Info,
     Error,

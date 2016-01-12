@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-import {FeedbackType} from './FeedbackType';
+import {FeedbackType} from './feedbackType';
 
 export class Feedback {
     isWorking = false;

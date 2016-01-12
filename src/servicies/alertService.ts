@@ -1,7 +1,8 @@
 ﻿import {AlertType} from 'entities';
+import {IAlertService} from './ialertService';
 
-/*@ngInject*/ 
-export class AlertService {
+/*@ngInject*/
+export class AlertService implements IAlertService {
     constructor(
         private $rootScope,
         private $timeout
@@ -9,7 +10,7 @@ export class AlertService {
         $rootScope.alerts = [];
     }
 
-    add = (type: AlertType, msg: string, autoClose: boolean = true) => {
+    add(type: AlertType, msg: string, autoClose: boolean = true) {
         var alert = {
             type: type,
             msg: msg,
@@ -27,12 +28,12 @@ export class AlertService {
         }
     }
 
-    closeAlert = (alert) => {
+    closeAlert(alert) {
         this.closeAlertIndex(this.$rootScope.alerts.indexOf(alert));
 
     }
 
-    closeAlertIndex = (index) => {
+    closeAlertIndex(index) {
         this.$rootScope.alerts.splice(index, 1);
     }
 }

@@ -1,1 +1,3 @@
-export * from './app';
+import './app';
+
+export * from './entities';
