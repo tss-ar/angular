@@ -1,6 +1,6 @@
 {
   "name": "tss-angular",
-  "version": "0.5.0",
+  "version": "0.10.0",
   "scripts": {
     "clean": "gulp clean",
     "build": "gulp build",
