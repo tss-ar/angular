@@ -14,7 +14,7 @@ export class RcDisabledProvider {
 
        var jqElement2 = <IJQuery>jqElement
             .find(':not([rc-disabled])')
-            .filter('.btn, li, input, button, select, md-checkbox, md-select, textarea, md-radio-button, md-switch')
+            .filter('.btn, li, input, button, select, md-checkbox, md-select, textarea, md-radio-button, md-switch, md-autocomplete')
             .filter(':not([ng-disabled])')
             .filter(function (index) {
                 return jQuery(this).parents().not(jqElement).filter('[rc-disabled]').length === 0;
@@ -28,7 +28,7 @@ export class RcDisabledProvider {
         }
 
         jqElement2.toggleClass('disabled', isDisabled)
-            .filter('input, button, select, md-checkbox, md-select, textarea, md-radio-button, md-switch')
+            .filter('input, button, select, md-checkbox, md-select, textarea, md-radio-button, md-switch, md-autocomplete')
             .attr('disabled', isDisabled);
     }
 

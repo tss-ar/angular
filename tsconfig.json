@@ -5,6 +5,7 @@
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "declaration": true
-  }	
+    "declaration": true,
+    "allowJs": true
+  }
 }

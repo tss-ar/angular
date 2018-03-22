@@ -2,12 +2,15 @@
   "name": "tss-angular",
   "version": "0.5.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "gulp clean",
+    "build": "gulp build",
+    "rebuild": "gulp rebuild"
   },
   "author": "Matias Ribichich",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/angular": "^1.6.43",
     "del": "2.2.0",
     "dts-bundle": "^0.3.0",
     "dts-generator": "^1.6.3",
@@ -23,9 +26,12 @@
     "gulp-watch": "4.3.5",
     "merge2": "0.3.6",
     "run-sequence": "1.1.5",
-    "tsproject": "^1.2.0-rc.3"
+    "tsproject": "^1.2.0-rc.3",
+    "typings": "^0.7.7"
   },
-  "dependencies": {},
+  "dependencies": {
+    "webcamjs": "^1.0.24"
+  },
   "typescript": {
     "definition": "dist/angular/index.d.ts"
   }

@@ -8,7 +8,7 @@
                 if (value) {
                     $timeout(function () {
                         element[0].focus();
-                    }, 2000);
+                    }, 1500);
                 }
             });
         }

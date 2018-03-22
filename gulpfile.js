@@ -16,139 +16,133 @@ var merge = require('merge2');
 var dts = require('dts-bundle');
 var ngAnnotate = require('gulp-ng-annotate');
 var dtsGenerator = require('dts-generator').default;
-var tsproject = require( 'tsproject' );
+var tsproject = require('tsproject');
+
 var config = require('./gulp.conf');
+
+const DIST_DIR = './dist';
 
 var packageName = 'tss-angular';
 
-var tsProjectSrc = ts.createProject('./src/tsconfig.json');
+var tsProjectSrc = ts.createProject('./tsconfig.json');
 
 function sequenceComplete(done) {
-    return function (err) {
-        if (err) {
-            var error = new Error('build sequence failed');
-            error.showStack = false;
-            done(error);
-        } else {
-            done();
-        }
-    };
+  return function(err) {
+    if (err) {
+      var error = new Error('build sequence failed');
+      error.showStack = false;
+      done(error);
+    } else {
+      done();
+    }
+  };
 }
 
-gulp.task('clean', [
-    'clean.css',
-    'clean.js'
-]);
-
-gulp.task('clean.css', () => {
-    del(path.join(config.dest.app.css, '**/*.css'));
+gulp.task('clean', () => {
+  del(`${DIST_DIR}/**`);
 });
 
-gulp.task('clean.js', () => {
-    del(path.join(config.dest.app.js, '**/*.{js,js.map,d.ts}'));
+gulp.task('build', done => {
+  runSequence(
+    'build.files',
+    'build.images',
+    'build.css',
+    'build.html',
+    'build.js',
+    sequenceComplete(done)
+  );
 });
 
-gulp.task('build', (done) => {
-    runSequence(
-        'build.css',
-        'build.html',
-        'build.js',
-        'build.jsDts',
-        sequenceComplete(done));
+gulp.task('rebuild', done => {
+  runSequence('clean', 'build', sequenceComplete(done));
 });
 
-gulp.task('rebuild', (done) => {
-    runSequence('clean', 'build', sequenceComplete(done));
+gulp.task('build.files', () => {
+  return gulp
+    .src(['./src/libs/webcam.swf'], { base: './src' })
+    .pipe(gulp.dest(DIST_DIR));
+});
+
+gulp.task('build.images', () => {
+  return gulp
+    .src(config.src.app.images, { base: './src' })
+    .pipe(gulp.dest(DIST_DIR));
 });
 
 gulp.task('build.css', () => {
-    return gulp.src(config.src.app.css)
-        .pipe(sourcemaps.init())
-        .pipe(sass().on('error', sass.logError))
-        .pipe(autoprefixer())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(config.dest.app.css));
+  return gulp
+    .src(config.src.app.css)
+    .pipe(sourcemaps.init())
+    .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('build.html', function () {
-    return gulp.src(config.src.app.html)
-        .pipe(htmlmin({ collapseWhitespace: true }))
-        .pipe(ngTemplates({
-            filename: 'templates.js',
-            module: 'app.templates',
-            path: function (path, base) {
-                return path.replace(base, '/app/');
-            }
-        }))
-        .pipe(gulp.dest(config.dest.app.html));
+gulp.task('build.html', function() {
+  return gulp
+    .src(config.src.app.html)
+    .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(
+      ngTemplates({
+        filename: 'templates.js',
+        module: 'tss-angular.templates',
+        path: function(path, base) {
+          return path.replace(base, '/' + packageName + '/');
+        }
+      })
+    )
+    .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('build.js', function () {
-    var tsResult = gulp.src([config.src.app.js, config.src.app.jsTds])
-       // .pipe(sourcemaps.init())
-        .pipe(ts(tsProjectSrc, {
-            typescript: require('typescript')
-        }));
+gulp.task('build.js', function() {
+  var tsResult = gulp
+    .src([config.src.app.js])
+    // .pipe(sourcemaps.init())
+    .pipe(
+      ts(tsProjectSrc, {
+        typescript: require('typescript')
+      })
+    );
 
-    let jsStream = tsResult.js
-        .pipe(ngAnnotate({ single_quotes: true }))
-        //.pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(config.dest.app.js));
+  let jsStream = tsResult.js
+    .pipe(ngAnnotate({ single_quotes: true }))
+    //.pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(DIST_DIR));
 
-    return merge([
-        tsResult.dts.pipe(gulp.dest(config.dest.app.jsTds)),
-        jsStream
-    ]);
-});
-
-gulp.task('build.jsDts', function () {
-    dts.bundle({
-        name: packageName,
-        prefix: '',
-        main: path.join(config.dest.app.jsTds, 'index.d.ts'),
-        out: path.join(__dirname, config.dest.app.js, 'index.d.ts')
-    });
-    
-    // dtsGenerator({
-    //     name: packageName,
-    //     project: 'src',
-    //     out: 'index2.d.ts',
-    //     exclude: ['./**/*.d.ts'],
-    // verbose: true
-    // });
-    
-    // return tsproject.src( './src')
-    //     .pipe( gulp.dest( './dist3' ) );
+  return merge([tsResult.dts.pipe(gulp.dest(DIST_DIR)), jsStream]);
 });
 
 gulp.task('watch.css', () => {
-    watch(config.src.app.css, batch(function (events, done) {
-        gulp.start('build.css', done);
-    }));
+  watch(
+    config.src.app.css,
+    batch(function(events, done) {
+      gulp.start('build.css', done);
+    })
+  );
 });
 
 gulp.task('watch.html', () => {
-    watch(config.src.app.html, batch(function (events, done) {
-        gulp.start('build.html', done);
-    }));
+  watch(
+    config.src.app.html,
+    batch(function(events, done) {
+      gulp.start('build.html', done);
+    })
+  );
 });
 
 gulp.task('watch.js', () => {
-    watch([config.src.app.js], {
-        readDelay: 2000
-    }, batch(function (events, done) {
-        gulp.start('build.js', done);
-    }));
+  watch(
+    [config.src.app.js],
+    {
+      readDelay: 2000
+    },
+    batch(function(events, done) {
+      gulp.start('build.js', done);
+    })
+  );
 });
 
-gulp.task('watch', (done) => {
-    runSequence(
-        'clean',
-        'build',
-        [
-            'watch.css',
-            'watch.html',
-            'watch.js'
-        ],
-        done);
+gulp.task('watch', done => {
+  runSequence('clean', 'build', ['watch.css', 'watch.html', 'watch.js'], done);
 });
