@@ -1,4 +1,4 @@
-﻿import * as Webcam from '../libs/webcam';
+﻿import * as Webcam from 'webcamjs';
 
 class WebcamConfig {
   image_format: string;

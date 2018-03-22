@@ -44,7 +44,6 @@ gulp.task('clean', () => {
 
 gulp.task('build', done => {
   runSequence(
-    'build.files',
     'build.images',
     'build.css',
     'build.html',
@@ -55,12 +54,6 @@ gulp.task('build', done => {
 
 gulp.task('rebuild', done => {
   runSequence('clean', 'build', sequenceComplete(done));
-});
-
-gulp.task('build.files', () => {
-  return gulp
-    .src(['./src/libs/webcam.swf'], { base: './src' })
-    .pipe(gulp.dest(DIST_DIR));
 });
 
 gulp.task('build.images', () => {
